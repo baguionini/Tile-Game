@@ -8,8 +8,9 @@ public:
 	Platform(){}
 	~Platform();
 	void setTile(float gridSizeF, int xi, int yi){
+		body.setSize(sf::Vector2f(gridSizeF,gridSizeF));
 		body.setPosition(xi * gridSizeF, yi * gridSizeF);
-		body.setFillColor(sf::Color::White);
+		body.setFillColor(sf::Color::Blue);
 		//body.setTexture(nullptr);
 		
 	}
@@ -21,3 +22,4 @@ private:
 	sf::RectangleShape body;
 	int x, y;
 };
+//git push origin dev:master

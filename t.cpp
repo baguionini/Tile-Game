@@ -10,7 +10,7 @@ int main(void){
 
     //std::vector<std::vector<Tile> > tileMap;
     std::vector<Platform> platform;
-    std::vector<std::vector<sf::RectangleShape> > vert;
+    std::vector<std::vector<Platform> > vert;
     const int height = 100;
     const int width = 100;
     // Initialize elements for cursor selection
@@ -40,18 +40,16 @@ int main(void){
 
 	perlinNoise1D(width, fnoiseSeed1D, octave, fperlinNoise1D, bias);
 	int y;
-    vert.resize(width,std::vector<sf::RectangleShape>());
+    vert.resize(width,std::vector<Platform>());
 	for (int x = 0; x < width; x++) {
-        vert[x].resize(height, sf::RectangleShape());
+        vert[x].resize(height, Platform());
 		y = (fperlinNoise1D[x] * float(height) / altitude + float(height) / altitude);
 //        .resize(height, std::vector<Platform>();
-		platform.push_back(Platform(nullptr, gridSizeF, x, y));
+		//platform.push_back(Platform(nullptr, gridSizeF, x, y));
         //std::cout << y << ": " ;
 		for (int f = height-1; f >= y; f--) {
            //std::cout << f << " " ;
-           vert[x][f].setSize(sf::Vector2f(gridSizeF,gridSizeF));
-           vert[x][f].setPosition(x * gridSizeF, f * gridSizeF);
-           vert[x][f].setFillColor(sf::Color::Blue);
+            vert[x][f].setTile(gridSizeF, x, f);
 		}//std::cout << "\n";
 	}
     //terrain1D(tileMap, width, height, octave, bias, altitude);
@@ -147,9 +145,11 @@ int color = 0;
         player.Update(deltaTime);
         sf::Vector2f direction;
         for(int x = 0 ; x < width; x++){
-            if(platform[x].GetCollision().CheckCollision(playerCollision,direction,1.0f))
-                player.oncollision(direction);
+            for(int y = 0; y < height; y++)
+                if(vert[x][y].GetCollision().CheckCollision(playerCollision,direction,1.0f))
+                    player.oncollision(direction);
         }
+
         view.setCenter(player.getPosition());
 
         window.setView(view);
@@ -159,11 +159,9 @@ int color = 0;
         // Draw tilemap
         for(int x = 0 ; x < width; x++){
             for(int y = 0; y < height; y++)
-                window.draw(vert[x][y]);
+                vert[x][y].Draw(window);
         }
-        for(int x = 0 ; x < width; x++){
-            platform[x].Draw(window);
-        }
+
 
 
 
