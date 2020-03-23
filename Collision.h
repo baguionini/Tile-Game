@@ -9,7 +9,7 @@ public:
 
 	void move(float dx, float dy) { body.move(dx, dy); }
 
-	bool CheckCollision(Collision& Other,sf::Vector2f& direction, float push);
+	bool CheckCollision(Collision& Other,sf::Vector2f& direction, float push,sf::Color Color);
 	sf::Vector2f GetPosition() { return body.getPosition(); }
 	sf::Vector2f GetHalfsize() { return (body.getSize() / 2.0f); }
 

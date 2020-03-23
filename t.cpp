@@ -1,5 +1,5 @@
 #include "terrain.h"
-static const float View_Size = 1000;
+static const float View_Size = 500;
 
 int main(void){
     float gridSizeF = 20.0f; // Gridsize of the map
@@ -46,7 +46,6 @@ int main(void){
 		y = (fperlinNoise1D[x] * float(height) / altitude + float(height) / altitude);
 //        .resize(height, std::vector<Platform>();
 		//platform.push_back(Platform(nullptr, gridSizeF, x, y));
-        std::cout << y << ": " ;
 		for (int f = height - 50; f >= y; f--) {
            //std::cout << f << " " ;
             vert[x][f].setTile(gridSizeF, x, f);
@@ -143,12 +142,12 @@ int color = 0;
                 
 
         }
-        window.clear(sf::Color::White);
+        
         player.Update(deltaTime);
         sf::Vector2f direction;
         for(int x = 0 ; x < width; x++){
             for(int y = 0; y < height; y++)
-                if(vert[x][y].GetCollision().CheckCollision(playerCollision,direction,1.0f))
+                if(vert[x][y].GetCollision().CheckCollision(playerCollision,direction,1.0f,vert[x][y].getColor()))
                     player.oncollision(direction);
         }
 
@@ -156,15 +155,15 @@ int color = 0;
 
         window.setView(view);
 
+        window.clear(sf::Color::Blue);
 
-        player.draw(window);
+
         // Draw tilemap
         for(int x = 0 ; x < width; x++){
             for(int y = 0; y < height; y++)
                 vert[x][y].Draw(window);
         }
-
-
+        player.draw(window);
 
 
         window.draw(cursor);
