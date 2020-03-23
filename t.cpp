@@ -1,5 +1,5 @@
 #include "terrain.h"
-static const float View_Size = 500;
+static const float View_Size = 1000;
 
 int main(void){
     float gridSizeF = 20.0f; // Gridsize of the map
@@ -10,6 +10,7 @@ int main(void){
 
     //std::vector<std::vector<Tile> > tileMap;
     std::vector<Platform> platform;
+    std::vector<std::vector<sf::RectangleShape> > vert;
     const int height = 100;
     const int width = 100;
     // Initialize elements for cursor selection
@@ -39,12 +40,19 @@ int main(void){
 
 	perlinNoise1D(width, fnoiseSeed1D, octave, fperlinNoise1D, bias);
 	int y;
+    vert.resize(width,std::vector<sf::RectangleShape>());
 	for (int x = 0; x < width; x++) {
+        vert[x].resize(height, sf::RectangleShape());
 		y = (fperlinNoise1D[x] * float(height) / altitude + float(height) / altitude);
+//        .resize(height, std::vector<Platform>();
 		platform.push_back(Platform(nullptr, gridSizeF, x, y));
-		for (int f = height; f >= y; f--) {
-            //
-		}
+        //std::cout << y << ": " ;
+		for (int f = height-1; f >= y; f--) {
+           //std::cout << f << " " ;
+           vert[x][f].setSize(sf::Vector2f(gridSizeF,gridSizeF));
+           vert[x][f].setPosition(x * gridSizeF, f * gridSizeF);
+           vert[x][f].setFillColor(sf::Color::Blue);
+		}//std::cout << "\n";
 	}
     //terrain1D(tileMap, width, height, octave, bias, altitude);
 
@@ -135,22 +143,28 @@ int color = 0;
                 */
 
         }
+        window.clear(sf::Color::Black);
         player.Update(deltaTime);
         sf::Vector2f direction;
         for(int x = 0 ; x < width; x++){
-                if(platform[x].GetCollision().CheckCollision(playerCollision,direction,1.0f))
-                    player.oncollision(direction);
+            if(platform[x].GetCollision().CheckCollision(playerCollision,direction,1.0f))
+                player.oncollision(direction);
         }
         view.setCenter(player.getPosition());
 
         window.setView(view);
 
-        window.clear(sf::Color::Black);
+
         player.draw(window);
         // Draw tilemap
         for(int x = 0 ; x < width; x++){
+            for(int y = 0; y < height; y++)
+                window.draw(vert[x][y]);
+        }
+        for(int x = 0 ; x < width; x++){
             platform[x].Draw(window);
         }
+
 
 
         window.draw(cursor);
