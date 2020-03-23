@@ -1,5 +1,5 @@
 #include "terrain.h"
-static const float View_Size = 500;
+static const float View_Size = 1000;
 
 int main(void){
     float gridSizeF = 20.0f; // Gridsize of the map
@@ -29,29 +29,48 @@ int main(void){
     cursor.setOutlineColor(sf::Color::Red);
     //initGrid(tileMap, width, height,gridSizeF, nullptr);
 
+    //Initialize whole world
+    vert.resize(width,std::vector<Platform>());
+    for(int x = 0; x < width; x++){
+        vert[x].resize(height, Platform());
+        for(int y = 0; y < height; y++){
+            vert[x][y].setTile(gridSizeF, x, y);
+        }
+    }
+
 
 	float fnoiseSeed1D[width];
 	float fperlinNoise1D[width];
 	int octave = 7; // 1 - 7, oddly
 	float bias = 1.50f;
 	float altitude = 4.0f;
-	for (int i = 0; i < width; i++)
+	for (int i = 0; i < width; i++){
 		fnoiseSeed1D[i] = (float)rand() / (float)RAND_MAX;
+    }
 
+
+    int relativeHeight = height/2;
 	perlinNoise1D(width, fnoiseSeed1D, octave, fperlinNoise1D, bias);
 	int y;
-    vert.resize(width,std::vector<Platform>());
+    // Generate mountains 
 	for (int x = 0; x < width; x++) {
-        vert[x].resize(height, Platform());
-		y = (fperlinNoise1D[x] * float(height) / altitude + float(height) / altitude);
-//        .resize(height, std::vector<Platform>();
-		//platform.push_back(Platform(nullptr, gridSizeF, x, y));
-		for (int f = height - 50; f >= y; f--) {
-           //std::cout << f << " " ;
-            vert[x][f].setTile(gridSizeF, x, f);
-		}//std::cout << "\n";
-	}
+		y = (fperlinNoise1D[x] * float(relativeHeight) / altitude + float(relativeHeight) / altitude);
+		for (int f = relativeHeight; f >= y; f--) {
+            vert[x][f].setColor(sf::Color::Black);
+	    }
+    }
     //terrain1D(tileMap, width, height, octave, bias, altitude);
+
+    int octave2D = 3; // 1 - 8 I think
+    double zoom = 6.0f, point = 3.0f, scale = 2.0f;
+
+    for(int x = 0; x < width; x++){
+        for(int y = relativeHeight; y < height; y++){
+            int color = (int)(noise2d(x,y,octave2D,zoom,point,scale));
+            if(color > 120)
+                vert[x][y].setColor(sf::Color::Black);
+        }
+    }
 
 	//Textures
 	sf::Texture playerTexture;

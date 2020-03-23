@@ -10,7 +10,7 @@ public:
 	void setTile(float gridSizeF, int xi, int yi){
 		body.setSize(sf::Vector2f(gridSizeF,gridSizeF));
 		body.setPosition(xi * gridSizeF, yi * gridSizeF);
-		body.setFillColor(sf::Color::Black);
+		body.setFillColor(sf::Color::White);
 		//body.setTexture(nullptr
 	}
 	void setColor(sf::Color color){body.setFillColor(color);}
