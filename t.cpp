@@ -11,8 +11,8 @@ int main(void){
     //std::vector<std::vector<Tile> > tileMap;
     std::vector<Platform> platform;
     std::vector<std::vector<Platform> > vert;
-    const int height = 100;
-    const int width = 100;
+    const int height = 200;
+    const int width = 200;
     // Initialize elements for cursor selection
     sf::Vector2i mouseScreen;
     sf::Vector2i mouseWindow;
@@ -46,8 +46,8 @@ int main(void){
 		y = (fperlinNoise1D[x] * float(height) / altitude + float(height) / altitude);
 //        .resize(height, std::vector<Platform>();
 		//platform.push_back(Platform(nullptr, gridSizeF, x, y));
-        //std::cout << y << ": " ;
-		for (int f = height-1; f >= y; f--) {
+        std::cout << y << ": " ;
+		for (int f = height - 50; f >= y; f--) {
            //std::cout << f << " " ;
             vert[x][f].setTile(gridSizeF, x, f);
 		}//std::cout << "\n";
@@ -116,32 +116,34 @@ int color = 0;
                 default:
                     break;
             }
-            /*
+            
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-                if(tileMap[mouseGrid.x][mouseGrid.y].getFillColor() == sf::Color::White){
+                if(vert[mouseGrid.x][mouseGrid.y].getColor() == sf::Color::White){
                     switch(color){
                         case 0:
-                            tileMap[mouseGrid.x][mouseGrid.y].setFillColor(sf::Color::Red);
+                            vert[mouseGrid.x][mouseGrid.y].setColor(sf::Color::Red);
                             cursor.setOutlineColor(sf::Color::Red);
                             break;
                         case 1:
-                        tileMap[mouseGrid.x][mouseGrid.y].setFillColor(sf::Color::Blue);
-                        cursor.setOutlineColor(sf::Color::Blue);
+                            vert[mouseGrid.x][mouseGrid.y].setColor(sf::Color::Blue);
+                            cursor.setOutlineColor(sf::Color::Blue);
                             break;
                         case 2:
-                            tileMap[mouseGrid.x][mouseGrid.y].setFillColor(sf::Color::Yellow);
+                            vert[mouseGrid.x][mouseGrid.y].setColor(sf::Color::Yellow);
                             cursor.setOutlineColor(sf::Color::Yellow);
                             break;
                         default:
                             break;
                     }
                 }
-            if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
-                tileMap[mouseGrid.x][mouseGrid.y].setFillColor(sf::Color::White);
-                */
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+                vert[mouseGrid.x][mouseGrid.y].setColor(sf::Color::White);
+            }
+
+                
 
         }
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::White);
         player.Update(deltaTime);
         sf::Vector2f direction;
         for(int x = 0 ; x < width; x++){
